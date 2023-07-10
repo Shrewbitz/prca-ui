@@ -52,6 +52,8 @@ function App() {
     // const handleLoading = () => {
     //   setIsLoading(false);
     // }
+    // fetch('https://prca-dd7106876c30.herokuapp.com/analyze', {
+      // fetch(`https://prca-dd7106876c30.herokuapp.com/results/${jobId}`)
 
     const handleAnalyze = async (formData) => {
         setIsLoading(true)
@@ -61,7 +63,7 @@ function App() {
             github_repo: formData.repo,
             github_user: formData.githubUser,
         })
-        fetch('https://prca-dd7106876c30.herokuapp.com/analyze', {
+        fetch('http://127.0.0.1:5000/analyze', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,19 +81,51 @@ function App() {
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
-                setAnalysis(data)
-                setIsLoading(false)
+              const jobId = data.job_id;
+              console.log(`Job ${jobId} started.`);
+              const jobCheckIntervalId = setInterval(() => {
+                fetch(`http://127.0.0.1:5000/results/${jobId}`, {
+                  method: 'GET',
+                })
+                  .then((response) => {
+                    if (response.status === 202) {
+                      console.log('Job in progress');
+                    } else if (response.ok) {
+                      return response.json();
+                    } else {
+                      throw new Error('Network response was not ok');
+                    }
+                  })
+                  .then((data) => {
+                    if (data) {
+                      console.log(data);
+                      setAnalysis(data);
+                      setIsLoading(false);
+                      clearInterval(jobCheckIntervalId);
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error.message);
+                    clearInterval(jobCheckIntervalId);
+                  });
+              }, 5000);
             })
-            .catch((error) => {
-                setAnalysis({ error: error.message })
-                setIsLoading(false)
+            .catch(error => {
+              setAnalysis({error: error.message});
+              setIsLoading(false)
             })
     }
+
+
+    
+
+
 
     const handleAnalyzeAnother = () => {
         setAnalysis(null)
     }
+
+
 
     return (
         <ThemeProvider theme={theme}>
