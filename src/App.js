@@ -63,7 +63,7 @@ function App() {
             github_repo: formData.repo,
             github_user: formData.githubUser,
         })
-        fetch('http://127.0.0.1:5000/analyze', {
+        fetch('https://prca-dd7106876c30.herokuapp.com/analyze', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function App() {
               const jobId = data.job_id;
               console.log(`Job ${jobId} started.`);
               const jobCheckIntervalId = setInterval(() => {
-                fetch(`http://127.0.0.1:5000/results/${jobId}`, {
+                fetch(`https://prca-dd7106876c30.herokuapp.com/results/${jobId}`, {
                   method: 'GET',
                 })
                   .then((response) => {
