@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Button, Paper, Typography } from '@mui/material/'
 
 const Analysis = ({ analysisText, onAnalyzeAnother }) => {
-    const formattedText = <React.Fragment>Unable to analyze user.</React.Fragment>
+    let formattedText = <React.Fragment>Unable to analyze user.</React.Fragment>
     if (typeof analysisText === 'string' || analysisText instanceof String) {
         const lines = String(analysisText).split('\n')
         formattedText = lines.map((line, index) => (
