@@ -2,13 +2,16 @@ import React from 'react'
 import { Box, Button, Paper, Typography } from '@mui/material/'
 
 const Analysis = ({ analysisText, onAnalyzeAnother }) => {
-    const lines = String(analysisText).split('\n')
-    const formattedText = lines.map((line, index) => (
-        <React.Fragment key={index}>
-            {line}
-            <br />
-        </React.Fragment>
-    ))
+    const formattedText = "Unable to analyze user."
+    if (typeof myVar === 'string' || myVar instanceof String) {
+        const lines = String(analysisText).split('\n')
+        formattedText = lines.map((line, index) => (
+            <React.Fragment key={index}>
+                {line}
+                <br />
+            </React.Fragment>
+        ))
+    }
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
